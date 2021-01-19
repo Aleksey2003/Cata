@@ -1,5 +1,5 @@
 def titlesize(name)
-   return name.capitalize
+   puts name.capitalize
 end
 
 titlesize('hello word')
