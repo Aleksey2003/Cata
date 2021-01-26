@@ -6,7 +6,7 @@ def add_subject(name, client)
 end
 
 def finds(id, client)
-  f = "select FirstName, MiddleName, LastName, DAYOFMONTH(BirthDate) Day, MONTHNAME(BirthDate) Month from teachers_aleksey where ID = ('#{id}')"
+  f = "select FirstName, MiddleName, LastName, DAYOFMONTH(BirthDate) Day, MONTHNAME(BirthDate) Month, DAYNAME(BirthDate) Week from teachers_aleksey where ID = ('#{id}')"
   p f
   client.query(f)
 end
