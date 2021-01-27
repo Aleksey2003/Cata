@@ -1,3 +1,5 @@
+require 'date'
+
 def add_subject(name, client)
   escaped = client.escape(name)
   q = "insert into subjects_aleksey(Name) VALUES ('#{escaped}')"
@@ -10,6 +12,7 @@ def finds(id, client)
   if results.count == 0
     puts "Teacher with id #{id} was not found"
   else
-    puts "Teacher #{results[0]['FirstName']}" + "#{results[1]['MiddleName']}" + "#{results[2]['LastName']}" + "Born #{results[3]['BirthDate']}"
+    puts "Teacher #{results[0]['FirstName']} #{results[1]['MiddleName']} #{results[2]['LastName']} Born #{Date.parse(results[3]['BirthDate']).strftime("%d %b %Y year, in %A")}"
   end
 end
+
