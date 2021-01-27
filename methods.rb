@@ -12,7 +12,7 @@ def finds(id, client)
   if results.count == 0
     puts "Teacher with id #{id} was not found"
   else
-    puts "Teacher #{results[0]['FirstName']} #{results[1]['MiddleName']} #{results[2]['LastName']} Born #{Date.parse(results[3]['BirthDate']).strftime("%d %b %Y year, in %A")}"
+    puts "Teacher #{results[0]['FirstName']} #{results[0]['MiddleName']} #{results[0]['LastName']} Born #{(results[0]['BirthDate']).strftime("%d %b %Y year, in %A")}"
   end
 end
 
