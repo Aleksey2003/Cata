@@ -7,5 +7,6 @@ client.query("use applicant_tests")
 
 add_subject("fhfe", client)
 finds(1, client)
+get_class_info(3, client)
 
 client.close
