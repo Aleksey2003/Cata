@@ -17,13 +17,10 @@ def finds(id, client)
 end
 
 def get_class_info(id, client)
-  g = "SELECT classes.Name, FirstName, MiddleName, LastName FROM classes_aleksey classes
-         JOIN teachers_classes_aleksey teachers_classes ON classes.ID = teachers_classes.ClassID
-         JOIN teachers_aleksey teachers ON classes.ResponsibleTeacherID = teachers.ID
-         JOIN teachers ON teachers_classes.TeacherID = teachers.ID
-       WHERE teachers.ID = ('#{id}')"
-  results = client.query(g).to_a
+  g = ["SELECT classes.Name, FirstName, MiddleName, LastName FROM classes_aleksey", "select FirstName, MiddleName, LastName FROM teachers_aleksey teachers JOIN teachers_classes_aleksey teachers_classes ON classes_aleksey.ID = teachers_classes.ClassID JOIN teachers ON classes_aleksey.ResponsibleTeacherID = teachers.ID JOIN teachers ON teachers_classes.TeacherID = teachers.ID WHERE classes_aleksey.ResponsibleTeacherID = ('#{id}')"]
+  results = client.query(g).join(', ')
   if results.count == 0
-    puts "Class Name: #{results[0]['classes.Name']}\n\n Responsible teacher: #{results[0]['FirstName']} #{results[0]['MiddleName']} #{results[0]['LastName']} Involved teachers:"
+     "Class Name: #{results[0]['classes.Name']}\n\n Responsible teacher: #{results[0]['FirstName']} #{results[0]['MiddleName']} #{results[0]['LastName']} Involved teachers: (#{id.join(', ')}"
   end
+  return results
 end
