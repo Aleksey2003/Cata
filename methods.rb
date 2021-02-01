@@ -17,10 +17,17 @@ def finds(id, client)
 end
 
 def get_class_info(id, client)
-  g = ["SELECT classes.Name, FirstName, MiddleName, LastName FROM classes_aleksey", "select FirstName, MiddleName, LastName FROM teachers_aleksey teachers JOIN teachers_classes_aleksey teachers_classes ON classes_aleksey.ID = teachers_classes.ClassID JOIN teachers ON classes_aleksey.ResponsibleTeacherID = teachers.ID JOIN teachers ON teachers_classes.TeacherID = teachers.ID WHERE classes_aleksey.ResponsibleTeacherID = ('#{id}')"]
-  results = client.query(g).join(', ')
-  if results.count == 0
-     "Class Name: #{results[0]['classes.Name']}\n\n Responsible teacher: #{results[0]['FirstName']} #{results[0]['MiddleName']} #{results[0]['LastName']} Involved teachers: (#{id.join(', ')}"
+  g1 = "SELECT classes.Name, FirstName, MiddleName, LastName FROM classes_aleksey classes
+  JOIN teachers_aleksey teachers ON classes.ResponsibleTeacherID = teachers.ID where classes.ID = #{id}"
+  g2 = "SELECT FirstName, MiddleName, LastName FROM teachers_aleksey teachers
+  JOIN teachers_classes_aleksey teachers_classes ON teachers.ID = teachers_classes.TeacherID
+  JOIN classes_aleksey classes ON teachers_classes.ClassID = classes.ID where classes.ID = #{id}"
+  results1 = client.query(g1).to_a
+  results2 = client.query(g2).to_a
+  results2 = results2.map{|r| "#{r['FirstName']} #{r['MiddleName']} #{r['LastName']}"}.join("\n")
+  if results1.count == 0
+    "Class ID #{id} was't found"
+  else
+    "Class Name: #{results1[0]['Name']}\nResponsible teacher: #{results1[0]['FirstName']}  #{results1[0]['MiddleName']} #{results1[0]['LastName']}\nInvolved teachers:\n#{results2}"
   end
-  return results
 end
