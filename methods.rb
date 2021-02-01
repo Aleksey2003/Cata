@@ -1,11 +1,11 @@
 require 'date'
-
+=begin
 def add_subject(name, client)
   escaped = client.escape(name)
   q = "insert into subjects_aleksey(Name) VALUES ('#{escaped}')"
   client.query(q)
 end
-
+=end
 def finds(id, client)
   f = "select FirstName, MiddleName, LastName, BirthDate from teachers_aleksey where ID = ('#{id}')"
   results = client.query(f).to_a
@@ -29,5 +29,18 @@ def get_class_info(id, client)
     "Class ID #{id} was't found"
   else
     "Class Name: #{results1[0]['Name']}\nResponsible teacher: #{results1[0]['FirstName']}  #{results1[0]['MiddleName']} #{results1[0]['LastName']}\nInvolved teachers:\n#{results2}"
+  end
+end
+
+def get_subject_teachers(id, client)
+  s = "SELECT subjects.Name, FirstName, MiddleName, LastName FROM subjects_aleksey subjects
+  JOIN teachers_aleksey teachers ON subjects.ID = teachers.SubjectsID WHERE subjects.ID = #{id}"
+  results = client.query(s).to_a
+  results = results.map{|r| "#{r['FirstName']} #{r['MiddleName']} #{r['LastName']}"}.join("\n")
+  p results
+  if results.count == 0
+    "Subject ID #{id} was't found"
+  else
+    "Subject:\n#{results[0]['Name']}\nTeachers:\n#{results}"
   end
 end
