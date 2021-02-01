@@ -9,4 +9,5 @@ client.query("use applicant_tests")
 finds(1, client)
 puts get_class_info(3, client)
 puts get_subject_teachers(1, client)
+puts get_class_subjects(2, client)
 client.close

@@ -1,11 +1,11 @@
 require 'date'
-=begin
+
 def add_subject(name, client)
   escaped = client.escape(name)
   q = "insert into subjects_aleksey(Name) VALUES ('#{escaped}')"
   client.query(q)
 end
-=end
+
 def finds(id, client)
   f = "select FirstName, MiddleName, LastName, BirthDate from teachers_aleksey where ID = ('#{id}')"
   results = client.query(f).to_a
@@ -36,11 +36,25 @@ def get_subject_teachers(id, client)
   s = "SELECT subjects.Name, FirstName, MiddleName, LastName FROM subjects_aleksey subjects
   JOIN teachers_aleksey teachers ON subjects.ID = teachers.SubjectsID WHERE subjects.ID = #{id}"
   results = client.query(s).to_a
-  results = results.map{|r| "#{r['FirstName']} #{r['MiddleName']} #{r['LastName']}"}.join("\n")
+  res = results.map{|r| "#{r['FirstName']} #{r['MiddleName']} #{r['LastName']}"}.join("\n")
   p results
   if results.count == 0
     "Subject ID #{id} was't found"
   else
-    "Subject:\n#{results[0]['Name']}\nTeachers:\n#{results}"
+    "Subject: #{results[0]['Name']}\nTeachers:\n#{res}"
+  end
+end
+
+def get_class_subjects(id, client)
+  c1 = "SELECT classes_aleksey.Name FROM classes_aleksey WHERE classes_aleksey.ID = #{id}"
+  c2 = "SELECT s.Name, FirstName, MiddleName, LastName FROM subjects_aleksey s
+  JOIN teachers_aleksey t ON s.ID = t.SubjectsID WHERE classes_aleksey.ID = #{id}"
+  results1 = client.query(c1).to_a
+  results2 = client.query(c2).to_a
+  results2 = results2.map{|r| "#{r['Name']} #{r['FirstName']} #{r['MiddleName']} #{r['LastName']}"}.join('')
+    if results1.count == 0
+    "Class ID #{id} was't found"
+  else
+    "Class: #{results1[0]['Name']}\n#{results2}"
   end
 end
