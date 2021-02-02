@@ -51,7 +51,7 @@ def get_class_subjects(id, client)
   JOIN teachers_aleksey t ON s.ID = t.SubjectsID WHERE classes_aleksey.ID = #{id}"
   results1 = client.query(c1).to_a
   results2 = client.query(c2).to_a
-  results2 = results2.map{|r| "#{r['Name']} #{r['FirstName']} #{r['MiddleName']} #{r['LastName']}"}.join('')
+  results2 = results2.map{|r| "#{r['Name']} #{r['FirstName']} #{r['MiddleName'][0]}. #{r['LastName']}"}.join('')
     if results1.count == 0
     "Class ID #{id} was't found"
   else
