@@ -55,6 +55,6 @@ def get_class_subjects(id, client)
     if results1.count == 0
     "Class ID #{id} was't found"
   else
-    "Class: #{results1[0]['Name']}\nSubjects:\n#{results2} #{results2}"
+    "Class: #{results1[0]['Name']}\nSubjects:\n#{results2}"
   end
 end
