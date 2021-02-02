@@ -45,16 +45,16 @@ def get_subject_teachers(id, client)
   end
 end
 
-def get_class_subjects(id, client)
-  c1 = "SELECT classes_aleksey.Name FROM classes_aleksey WHERE classes_aleksey.ID = #{id}"
-  c2 = "SELECT s.Name, FirstName, MiddleName, LastName FROM subjects_aleksey s
-  JOIN teachers_aleksey t ON s.ID = t.SubjectsID WHERE classes_aleksey.ID = #{id}"
-  results1 = client.query(c1).to_a
-  results2 = client.query(c2).to_a
-  results2 = results2.map{|r| "#{r['Name']} #{r['FirstName']} #{r['MiddleName'][0]}. #{r['LastName']}"}
-    if results1.count == 0
-    "Class ID #{id} was't found"
+def get_class_subjects(name, client)
+  c = "SELECT FirstName, MiddleName, LastName FROM teachers_aleksey t
+  JOIN subjects_aleksey s ON t.SubjectsID = s.ID
+  JOIN teachers_classes_aleksey t_c ON t.ID = t_c.TeacherID
+  JOIN classes_aleksey c ON t_c.ClassID"
+  results = client.query(c).to_a
+  res = results.map{|r| "#{r['Name']} #{r['FirstName']} #{r['MiddleName'][0]}. #{r['LastName']}"}.join(', ')
+    if results.count == 0
+    "Class #{name} was't found"
   else
-    "Class: #{results1[0]['Name']}\nSubjects:\n#{results2}"
+    "Class: #{name}\nSubjects: #{res}"
   end
 end
