@@ -46,10 +46,11 @@ def get_subject_teachers(id, client)
 end
 
 def get_class_subjects(name, client)
-  c = "SELECT FirstName, MiddleName, LastName FROM teachers_aleksey t
-  JOIN subjects_aleksey s ON t.SubjectsID = s.ID
-  JOIN teachers_classes_aleksey t_c ON t.ID = t_c.TeacherID
-  JOIN classes_aleksey c ON t_c.ClassID"
+  c = "SELECT s.Name, FirstName, MiddleName, LastName FROM teachers_aleksey t
+     JOIN subjects_aleksey s ON t.SubjectsID = s.ID
+     JOIN teachers_classes_aleksey t_c ON t.ID = t_c.TeacherID
+     JOIN classes_aleksey c ON t_c.ClassID
+  WHERE c.Name = #{name}"
   results = client.query(c).to_a
   res = results.map{|r| "#{r['Name']} #{r['FirstName']} #{r['MiddleName'][0]}. #{r['LastName']}"}.join(', ')
     if results.count == 0
