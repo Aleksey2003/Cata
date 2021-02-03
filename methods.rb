@@ -1,4 +1,5 @@
 require 'date'
+require 'digest'
 
 def add_subject(name, client)
   escaped = client.escape(name)
@@ -57,5 +58,27 @@ def get_class_subjects(name, client)
     "Class #{name} was't found"
   else
     "Class: #{name}\nSubjects:\n#{res}"
+  end
+end
+
+def get_teachers_list_by_letter(letter, client)
+  t = "SELECT FirstName, MiddleName, LastName, s.Name FROM teachers_aleksey t
+  JOIN subjects_aleksey s ON t.SubjectsID = s.ID WHERE FirstName RLIKE '#{letter}' OR LastName RLIKE '#{letter}'"
+  results = client.query(t).to_a
+  res = results.map{|r| "#{r['FirstName'][0]}. #{r['MiddleName'][0]}. #{r['LastName']} (#{r['Name']})"}.join("\n")
+  if results.count == 0
+    "Teacher with #{letter} in the name was't found"
+  else
+    res
+  end
+end
+
+def set_md5(teacher, client)
+  s = "SELECT FirstName, MiddleName, LastName FROM teachers_aleksey where ID = ('#{id}')"
+  results = client.query(s).to_a
+  if results.count == 0
+    puts "Teacher with id #{id} was not found"
+  else
+    puts "#{(results[0]['FirstName']).hexdigest}"
   end
 end
