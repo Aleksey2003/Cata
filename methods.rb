@@ -73,12 +73,10 @@ def get_teachers_list_by_letter(letter, client)
   end
 end
 
-def set_md5(teacher, client)
-  s = "SELECT FirstName, MiddleName, LastName FROM teachers_aleksey where ID = ('#{id}')"
+def set_md5(client)
+  s = "SELECT FirstName, MiddleName, LastName, BirthDate, Current_age FROM teachers_aleksey"
   results = client.query(s).to_a
   if results.count == 0
-    puts "Teacher with id #{id} was not found"
-  else
-    puts "#{(results[0]['FirstName']).hexdigest}"
+    puts "#{(results[0]['FirstName']).hexdigest} #{(results[0]['MiddleName']).hexdigest} #{(results[0]['LastName']).hexdigest}"
   end
 end
