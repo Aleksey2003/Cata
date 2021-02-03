@@ -77,6 +77,6 @@ def set_md5(client)
   s = "SELECT FirstName, MiddleName, LastName, BirthDate, Current_age FROM teachers_aleksey"
   results = client.query(s).to_a
   if results.count == 0
-    puts "#{(results[0]['FirstName']).hexdigest} #{(results[0]['MiddleName']).hexdigest} #{(results[0]['LastName']).hexdigest}"
+    puts "#{(results[0]['FirstName']).hexdigest} #{(results[0]['MiddleName']).hexdigest} #{(results[0]['LastName']).hexdigest} #{(results[0]['BirthDate']).hexdigest} #{(results[0]['Current_age']).hexdigest}"
   end
 end
