@@ -73,13 +73,13 @@ def get_teachers_list_by_letter(letter, client)
   end
 end
 
-def set_md5(client)
+def set_md5(id, client)
   s = "SELECT SubjectsID, FirstName, MiddleName, LastName, BirthDate, Current_age FROM teachers_aleksey"
   results = client.query(s).to_a
   res = results.map{|r| "#{r['SubjectsID']}#{r['FirstName']}#{r['MiddleName']}#{r['LastName']}#{r['BirthDate']}#{'Current_age'}"}
   if results.count == 0
     puts "Nothing found"
   else
-    res.each{|r| Digest::MD5.hexdigest r}
+    "ID #{id} --- MD5 #{res.each{|r| Digest::MD5.hexdigest r}}"
   end
 end
