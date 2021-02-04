@@ -84,7 +84,8 @@ def set_md5(client)
       id = r['ID']
       md5_str = "#{r['SubjectsID']}#{r['FirstName']}#{r['MiddleName']}#{r['LastName']}#{r['BirthDate']}#{r['Current_age']}"
       md5 = Digest::MD5.hexdigest md5_str
-      "UPDATE teachers_aleksey SET MD5 = '#{md5}' WHERE ID = '#{id}'"
+      m = "UPDATE teachers_aleksey SET MD5 = '#{md5}' WHERE ID = '#{id}'"
+      results = client.query(m)
     end
   end
 end
