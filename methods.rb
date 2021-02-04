@@ -76,11 +76,14 @@ end
 def set_md5(client)
   s = "SELECT * FROM teachers_aleksey"
   results = client.query(s).to_a
-  p results
-  #res = results.map{|r| "#{r['SubjectsID']}#{r['FirstName']}#{r['MiddleName']}#{r['LastName']}#{r['BirthDate']}#{'Current_age'}"}
+  results.each do |r|
+  id = r['ID'], r['SubjectsID'], r['FirstName'], r['MiddleName'], r['LastName'], r['BirthDate'], r['Current_age']
+  md5_str = "#{r['ID']} #{r['SubjectsID']} #{r['FirstName']} #{r['MiddleName']} #{r['LastName']} #{r['BirthDate']} #{r['Current_age']}"
+  Digest::MD5.hexdigest r
+  end
   if results.count == 0
     puts "Nothing found"
   else
-    results.each{|r| Digest::MD5.hexdigest r}
+    "ID #{id} --- MD5 #{md5_str}"
   end
 end
