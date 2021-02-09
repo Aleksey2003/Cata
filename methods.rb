@@ -90,12 +90,12 @@ def set_md5(client)
   end
 end
 
-def get_teachers_by_year(client)
-  y = "SELECT FirstName, MiddleName, LastName, Current_age FROM teachers_aleksey"
+def get_teachers_by_year(year, client)
+  y = "SELECT FirstName, MiddleName, LastName, Current_age FROM teachers_aleksey WHERE Current_age = '#{year}'"
   results = client.query(y).to_a
   res = results.map{|r| "#{r['FirstName']} #{r['MiddleName']} #{r['LastName']}"}.join(', ')
   if results.count == 0
-    "Nothing was't found"
+    "There is no such age #{year}"
   else
     "Teachers born in #{results[0]['Current_age']}: #{res}"
   end
