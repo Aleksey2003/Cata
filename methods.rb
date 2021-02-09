@@ -97,6 +97,6 @@ def get_teachers_by_year(client)
   if results.count == 0
     "Nothing was't found"
   else
-    "Teachers born in #{res}"
+    "Teachers born in #{res[0]['Current_age']}: #{res[0]['FirstName']}, #{res[0]['MiddleName']}, #{res[0]['LastName']}"
   end
 end
