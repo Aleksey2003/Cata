@@ -93,10 +93,10 @@ end
 def get_teachers_by_year(client)
   y = "SELECT FirstName, MiddleName, LastName, Current_age FROM teachers_aleksey"
   results = client.query(y).to_a
-  res = results.map{|r| "#{r['FirstName']} #{r['MiddleName']} #{r['LastName']} #{r['Current_age']}"}.join(', ')
+  res = results.map{|r| "#{r['FirstName']} #{r['MiddleName']} #{r['LastName']}"}.join(', ')
   if results.count == 0
     "Nothing was't found"
   else
-    "Teachers born in #{res[0]['Current_age']}: #{res[0]['FirstName']}, #{res[0]['MiddleName']}, #{res[0]['LastName']}"
+    "Teachers born in #{results[0]['Current_age']}: #{res}"
   end
 end
