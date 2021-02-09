@@ -53,7 +53,7 @@ def get_class_subjects(name, client)
      JOIN classes_aleksey c ON t_c.ClassID
   WHERE c.Name = '#{name}'"
   results = client.query(c).to_a
-  res = results.map{|r| "#{r['Name']} #{r['FirstName']} #{r['MiddleName'][0]}. #{r['LastName']}"}.join("\n")
+  res = results.map{|r| "#{r['Name']} #{r['FirstName']} #{r['MiddleName']}. #{r['LastName']}"}.join("\n")
     if results.count == 0
     "Class #{name} was't found"
   else
@@ -87,5 +87,15 @@ def set_md5(client)
       m = "UPDATE teachers_aleksey SET MD5 = '#{md5}' WHERE ID = '#{id}'"
       results = client.query(m)
     end
+  end
+end
+
+def get_teachers_by_year(client)
+  y = "SELECT FirstName, MiddleName, LastName, Current_age FROM teachers_aleksey"
+  results = client.query(y).to_a
+  if results.count == 0
+    "Nothing was't found"
+  else
+    "Teachers born in #{results[0]['Current_age']}: #{results[0]['FirstName']} #{results[0]['MiddleName']} #{results[0]['LastName']}"
   end
 end

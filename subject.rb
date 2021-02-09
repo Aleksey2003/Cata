@@ -11,5 +11,6 @@ client.query("use applicant_tests")
 # puts get_subject_teachers(1, client)
 # puts get_class_subjects('11-A', client)
 #puts get_teachers_list_by_letter('a', client)
-set_md5(client)
+#set_md5(client)
+get_teachers_by_year(client)
 client.close
