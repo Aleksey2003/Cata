@@ -103,7 +103,7 @@ end
 def generate_random_date(date_begin, date_end)
   rand(Date.parse(date_begin)..Date.parse(date_end))
 end
-
+=begin
 def random_male_names(client)
   m = "SELECT FirstName FROM male_names"
   results = client.query(m).to_a
@@ -113,4 +113,12 @@ def random_male_names(client)
   else
     "#{res}"
   end
+end
+=end
+def random_male_names(client)
+  m = "SELECT FirstName FROM male_names"
+  results = client.query(m).to_a
+  a = []
+  results.sample(7).each{|r| a << r['FirstName']}
+  a.join(', ')
 end
