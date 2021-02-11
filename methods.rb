@@ -103,22 +103,19 @@ end
 def generate_random_date(date_begin, date_end)
   rand(Date.parse(date_begin)..Date.parse(date_end))
 end
-=begin
-def random_male_names(client)
+
+def random_male_names(n, client)
   m = "SELECT FirstName FROM male_names"
-  results = client.query(m).to_a
-  res = results.sample(7).map{|r| "#{r['FirstName']}"}.join(', ')
-  if results.count == 0
+  #@results = @results ? @results : client.query(m).to_a
+  @results = if @results
+               @results
+             else
+               client.query(m).to_a
+             end
+  res = @results.sample(n).map{|r| "#{r['FirstName']}"}.join(', ')
+  if @results.count == 0
     "Nothing found"
   else
     "#{res}"
   end
-end
-=end
-def random_male_names(client)
-  m = "SELECT FirstName FROM male_names"
-  results = client.query(m).to_a
-  a = []
-  results.sample(7).each{|r| a << r['FirstName']}
-  a.join(', ')
 end
