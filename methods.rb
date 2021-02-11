@@ -29,7 +29,7 @@ def get_class_info(id, client)
   if results1.count == 0
     "Class ID #{id} was't found"
   else
-    "Class Name: #{results1[0]['Name']}\nResponsible teacher: #{results1[0]['FirstName']}  #{results1[0]['MiddleName']} #{results1[0]['LastName']}\nInvolved teachers:\n#{results2}"
+    "Class Name: #{results1[0]['Name']}\nResponsible teacher: #{results1[0]['FirstName']} #{results1[0]['MiddleName']} #{results1[0]['LastName']}\nInvolved teachers:\n#{results2}"
   end
 end
 
@@ -38,7 +38,6 @@ def get_subject_teachers(id, client)
   JOIN teachers_aleksey teachers ON subjects.ID = teachers.SubjectsID WHERE subjects.ID = #{id}"
   results = client.query(s).to_a
   res = results.map{|r| "#{r['FirstName']} #{r['MiddleName']} #{r['LastName']}"}.join("\n")
-  p results
   if results.count == 0
     "Subject ID #{id} was't found"
   else
@@ -91,12 +90,27 @@ def set_md5(client)
 end
 
 def get_teachers_by_year(year, client)
-  y = "SELECT FirstName, MiddleName, LastName, Current_age FROM teachers_aleksey WHERE Current_age = '#{year}'"
+  y = "SELECT FirstName, MiddleName, LastName, BirthDate FROM teachers_aleksey WHERE YEAR(BirthDate) = '#{year}'"
   results = client.query(y).to_a
   res = results.map{|r| "#{r['FirstName']} #{r['MiddleName']} #{r['LastName']}"}.join(', ')
   if results.count == 0
     "There is no such age #{year}"
   else
-    "Teachers born in #{results[0]['Current_age']}: #{res}"
+    "Teachers born in #{year}: #{res}"
+  end
+end
+
+def generate_random_date(date_begin, date_end)
+  rand(Date.parse(date_begin)..Date.parse(date_end))
+end
+
+def random_male_names(client)
+  m = "SELECT FirstName FROM male_names"
+  results = client.query(m).to_a
+  res = results.sample(7).map{|r| "#{r['FirstName']}"}.join(', ')
+  if results.count == 0
+    "Nothing found"
+  else
+    "#{res}"
   end
 end
