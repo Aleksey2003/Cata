@@ -119,3 +119,25 @@ def random_male_names(n, client)
     "#{res}"
   end
 end
+
+def random_names(n, client)
+  m = "SELECT FirstName FROM male_names UNION ALL SELECT names FROM female_names"
+  @results = @results ? @results : client.query(m).to_a
+  res = @results.sample(n).map{|r| "#{r['FirstName']} #{r['names']}"}.join(', ')
+  if @results.count == 0
+    "Nothing found"
+  else
+    "#{res}"
+  end
+end
+
+def random_last_names(n, client)
+  l = "SELECT last_name FROM last_names"
+  @results = @results ? @results : client.query(l).to_a
+  res = @results.sample(n).map{|r| "#{r['last_name']}"}.join(', ')
+  if @results.count == 0
+    "Nothing found"
+  else
+    "#{res}"
+  end
+end

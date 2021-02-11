@@ -14,9 +14,21 @@ client.query("use applicant_tests")
 #set_md5(client)
 #puts get_teachers_by_year(1991, client)
 #puts generate_random_date('1990-01-18', '1997-05-23')
+#{t = Time.now
+#1000.times do
+#  puts random_male_names(1, client)
+#end
+#puts Time.now - t
+#
+#t = Time.now
+#4.times do
+#  puts random_names(1, client)
+#end
+#puts Time.now - t
+
 t = Time.now
-1000.times do
-  puts random_male_names(1, client)
+100.times do
+  puts random_last_names(1, client)
 end
 puts Time.now - t
 client.close
