@@ -141,3 +141,22 @@ def random_last_names(n, client)
     "#{res}"
   end
 end
+
+def random_peoples(n, client)
+  p = "SELECT FirstName FROM male_names UNION ALL SELECT names FROM female_names UNION SELECT last_name  FROM last_names"
+  @results = @results ? @results : client.query(p).to_a
+  if @results.count == 0
+    puts "Nothing found"
+  else
+    @results.each do |r|
+      id = r['ID']
+      date_begin = '1905'
+      date_end = '2020'
+      res1 = @results.sample(n).map{|a| "#{a['last_name']}"}
+      res2 = @results.sample(n).map{|b| "#{b['FirstName']} #{b['names']}"}
+      res3 = rand(Date.parse(date_begin)..Date.parse(date_end))
+      f = "UPDATE random_people_aleksey SET last_name = '#{res1}', FirstName = '#{res2}' BirthDate = '#{res3}' WHERE ID = '#{id}'"
+      @results = client.query(f)
+    end
+  end
+end
