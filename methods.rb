@@ -154,8 +154,8 @@ def random_peoples(n, client)
       date_end = '2020'
       res1 = @results.sample(n).map{|a| "#{a['last_name']}"}
       res2 = @results.sample(n).map{|b| "#{b['FirstName']} #{b['names']}"}
-      res3 = rand(Date.parse(date_begin)..Date.parse(date_end))
-      f = "UPDATE random_people_aleksey SET last_name = '#{res1}', FirstName = '#{res2}' BirthDate = '#{res3}' WHERE ID = '#{id}'"
+      date = rand(Date.parse(date_begin)..Date.parse(date_end))
+      f = "UPDATE random_people_aleksey SET last_name = '#{res1}', FirstName = '#{res2}' BirthDate = '#{date}' WHERE ID = '#{id}'"
       @results = client.query(f)
     end
   end
