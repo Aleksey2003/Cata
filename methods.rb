@@ -182,7 +182,13 @@ def creates(client)
       PRIMARY KEY (id)
       )"
       client.query(c)
-  rescue => error
-    p error
+  rescue
+    puts 'The table has already been created'
   end
+
+  t = "insert ignore into montana_public_district_report_card__uniq_dist_aleksey (id, name, clean_name, address, city, state, zip) select id, name, clean_name, address, city, state, zip from montana_public_district_report_card"
+  client.query(t)
+
+  c = "select id, clean_name from montana_public_district_report_card"
+  
 end
