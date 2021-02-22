@@ -122,9 +122,9 @@ end
 
 def random_names(n, client)
   m = "SELECT FirstName FROM male_names UNION ALL SELECT names FROM female_names"
-  @results = @results ? @results : client.query(m).to_a
-  res = @results.sample(n).map{|r| "#{r['FirstName']} #{r['names']}"}.join(', ')
-  if @results.count == 0
+  @first_names = @first_names ? @first_names : client.query(m).to_a
+  res = @first_names.sample(n).map{|r| "#{r['FirstName']} #{r['names']}"}.join(', ')
+  if @first_names.count == 0
     "Nothing found"
   else
     "#{res}"
@@ -133,30 +133,56 @@ end
 
 def random_last_names(n, client)
   l = "SELECT last_name FROM last_names"
-  @results = @results ? @results : client.query(l).to_a
-  res = @results.sample(n).map{|r| "#{r['last_name']}"}.join(', ')
-  if @results.count == 0
+  @last_names = @last_names ? @last_names : client.query(l).to_a
+  res = @last_names.sample(n).map{|r| "#{r['last_name']}"}.join(', ')
+  if @last_names.count == 0
     "Nothing found"
   else
     "#{res}"
   end
 end
 
-def random_peoples(n, client)
-  p = "SELECT FirstName FROM male_names UNION ALL SELECT names FROM female_names UNION SELECT last_name  FROM last_names"
-  @results = @results ? @results : client.query(p).to_a
-  if @results.count == 0
-    puts "Nothing found"
-  else
-    @results.each do |r|
-      id = r['ID']
-      date_begin = '1905'
-      date_end = '2020'
-      res1 = @results.sample(n).map{|a| "#{a['last_name']}"}
-      res2 = @results.sample(n).map{|b| "#{b['FirstName']} #{b['names']}"}
-      date = rand(Date.parse(date_begin)..Date.parse(date_end))
-      f = "UPDATE random_people_aleksey SET last_name = '#{res1}', FirstName = '#{res2}' BirthDate = '#{date}' WHERE ID = '#{id}'"
-      @results = client.query(f)
+def random_people(n, client)
+  if n.zero?
+    return
+  elsif n <= 20000
+    p1 = 'INSERT INTO random_people_aleksey(LastName, FirstName, BirthDate) VALUE'
+    p2 = ''
+    n.times do
+      p2 << "('#{random_names(1, client,)}', '#{random_last_names(1, client)}', '#{generate_random_date('1905-01-01', '2020-12-31')}'),"
     end
+
+    b = p1 + p2.chop
+
+    client.query(b)
+  else
+    # random_people(20000, client)
+    # random_people(n - 20000, client)
+    r = n / 20000
+    r.times do
+      random_people(20000, client)
+    end
+    t = n % 20000
+    random_people(t, client)
+  end
+rescue => e
+  p b, e
+end
+
+def creates(client)
+  begin
+      c = "CREATE TABLE montana_public_district_report_card__uniq_dist_aleksey(
+      id INT NOT NULL AUTO_INCREMENT,
+      name VARCHAR(255) NOT NULL UNIQUE,
+      clean_name VARCHAR(255) NOT NULL UNIQUE,
+      address VARCHAR(255) NOT NULL UNIQUE,
+      city VARCHAR(255) NOT NULL UNIQUE,
+      state VARCHAR(255) NOT NULL UNIQUE,
+      zip CHAR(15) NOT NULL UNIQUE,
+      PRIMARY KEY (id)
+      )"
+      client.query(c)
+  rescue => error
+    p error
   end
 end

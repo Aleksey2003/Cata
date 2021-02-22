@@ -32,6 +32,9 @@ client.query("use applicant_tests")
 #end
 #puts Time.now - t
 
-random_peoples(100, client)
+# t = Time.now
+# random_people(1000000, client)
+# puts Time.now - t
 
+creates(client)
 client.close
