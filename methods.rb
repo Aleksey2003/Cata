@@ -173,22 +173,38 @@ def creates(client)
   begin
       c = "CREATE TABLE montana_public_district_report_card__uniq_dist_aleksey(
       id INT NOT NULL AUTO_INCREMENT,
-      name VARCHAR(255) NOT NULL UNIQUE,
-      clean_name VARCHAR(255) NOT NULL UNIQUE,
-      address VARCHAR(255) NOT NULL UNIQUE,
-      city VARCHAR(255) NOT NULL UNIQUE,
-      state VARCHAR(255) NOT NULL UNIQUE,
-      zip CHAR(15) NOT NULL UNIQUE,
-      PRIMARY KEY (id)
-      )"
+      name VARCHAR(255) NULL,
+      clean_name VARCHAR(255) NULL,
+      address VARCHAR(255) NULL,
+      city VARCHAR(255) NULL,
+      state VARCHAR(255) NULL,
+      zip CHAR(10) NULL,
+      PRIMARY KEY (id),
+      unique (name, address, city, state, zip)
+      ) engine=InnoDB"
       client.query(c)
   rescue
     puts 'The table has already been created'
   end
 
-  t = "insert ignore into montana_public_district_report_card__uniq_dist_aleksey (id, name, clean_name, address, city, state, zip) select id, name, clean_name, address, city, state, zip from montana_public_district_report_card"
+  t = "insert ignore into montana_public_district_report_card__uniq_dist_aleksey (name, address, city, state, zip) select DISTINCT (school_name), address, city, state, zip from montana_public_district_report_card where id"
   client.query(t)
 
-  c = "select id, clean_name from montana_public_district_report_card"
-  
+  # cr = "select id, name from montana_public_district_report_card__uniq_dist_aleksey where clean_name is null"
+  cr = "select id, name from montana_public_district_report_card__uniq_dist_aleksey"
+  results = client.query(cr).to_a
+
+  if results.count == 0
+    puts "Nothing found"
+  else
+    results.each do |r|
+      id = r['id']
+      res = r['name']
+      res = res.gsub('Elem', 'Elementary School').gsub(/Schls|Schools/, 'School').gsub('H S', 'High School').gsub('K-12', 'Public')
+      res << ' District'
+      upd = "UPDATE montana_public_district_report_card__uniq_dist_aleksey SET clean_name = '#{res}' WHERE ID = #{id}"
+      p upd
+      client.query(upd)
+    end
+  end
 end
