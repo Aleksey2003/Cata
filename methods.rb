@@ -194,12 +194,12 @@ def creates(client)
   results = client.query(cr).to_a
 
   if results.count == 0
-    puts "Nothing found"
+    puts "Nothing happened"
   else
     results.each do |r|
       id = r['id']
       res = r['name']
-      res = res.gsub('Elem', 'Elementary School').gsub(/H S|HS/, 'High School').gsub(/Schls|Schools/, 'School').gsub(/K-12|Public/, 'Public School').gsub('School School', 'School')
+      res = res.gsub(/Elem|EL/, 'Elementary School').gsub(/H S|HS|Dist H S/, 'High School').gsub(/Schls|Schools/, 'School').gsub(/K-12|Public|School K-12/, 'Public School').gsub('School School', 'School')
       res << ' District'
       upd = "UPDATE montana_public_district_report_card__uniq_dist_aleksey SET clean_name = '#{res}' WHERE ID = #{id}"
       p upd
