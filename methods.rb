@@ -190,8 +190,7 @@ def creates(client)
   t = "insert ignore into montana_public_district_report_card__uniq_dist_aleksey (name, address, city, state, zip) select DISTINCT (school_name), address, city, state, zip from montana_public_district_report_card where id"
   client.query(t)
 
-  # cr = "select id, name from montana_public_district_report_card__uniq_dist_aleksey where clean_name is null"
-  cr = "select id, name from montana_public_district_report_card__uniq_dist_aleksey"
+  cr = "select id, name from montana_public_district_report_card__uniq_dist_aleksey where clean_name is null"
   results = client.query(cr).to_a
 
   if results.count == 0
@@ -200,7 +199,7 @@ def creates(client)
     results.each do |r|
       id = r['id']
       res = r['name']
-      res = res.gsub('Elem', 'Elementary School').gsub(/Schls|Schools/, 'School').gsub('H S', 'High School').gsub('K-12', 'Public')
+      res = res.gsub('Elem', 'Elementary School').gsub(/H S|HS/, 'High School').gsub(/Schls|Schools/, 'School').gsub(/K-12|Public/, 'Public School').gsub('School School', 'School')
       res << ' District'
       upd = "UPDATE montana_public_district_report_card__uniq_dist_aleksey SET clean_name = '#{res}' WHERE ID = #{id}"
       p upd
