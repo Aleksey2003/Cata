@@ -187,7 +187,7 @@ def creates(client)
     puts 'The table has already been created'
   end
 
-  t = "insert ignore into montana_public_district_report_card__uniq_dist_aleksey (name, address, city, state, zip) select DISTINCT (school_name), address, city, state, zip from montana_public_district_report_card where id"
+  t = "insert ignore into montana_public_district_report_card__uniq_dist_aleksey (name, address, city, state, zip) select DISTINCT school_name, address, city, state, zip from montana_public_district_report_card"
   client.query(t)
 
   cr = "select id, name from montana_public_district_report_card__uniq_dist_aleksey where clean_name is null"
@@ -202,7 +202,6 @@ def creates(client)
       res = res.gsub(/Elem|EL/, 'Elementary School').gsub(/H S|HS|Dist H S/, 'High School').gsub(/Schls|Schools/, 'School').gsub(/K-12|Public|School K-12/, 'Public School').gsub('School School', 'School')
       res << ' District'
       upd = "UPDATE montana_public_district_report_card__uniq_dist_aleksey SET clean_name = '#{res}' WHERE ID = #{id}"
-      p upd
       client.query(upd)
     end
   end
