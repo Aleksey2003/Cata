@@ -1,6 +1,7 @@
 require "mysql2"
 require 'dotenv/load'
 require_relative 'methods.rb'
+require_relative 'test2.rb'
 
 client = Mysql2::Client.new(host: "db09.blockshopper.com", username: ENV['DB_DB09_LGN'], password: ENV['DB_DB09_PWD'])
 client.query("use applicant_tests")
@@ -35,5 +36,6 @@ client.query("use applicant_tests")
 # t = Time.now
 # random_people(1000000, client)
 # puts Time.now - t
-creates(client)
+#creates(client)
+candidates(client)
 client.close
