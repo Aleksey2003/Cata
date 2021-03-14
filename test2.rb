@@ -32,7 +32,6 @@ def candidates(client)
       escaped = client.escape(res)
       update = "UPDATE hle_dev_test_aleksey SET clean_name = '#{escaped}' WHERE ID = #{id}"
       client.query(update)
-      p update
 
       rs = "The candidate is running for the #{escaped} office."
       upd = "UPDATE hle_dev_test_aleksey SET sentence = '#{rs}' WHERE ID = #{id}"
