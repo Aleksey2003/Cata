@@ -2,7 +2,7 @@ require 'nokogiri'
 require 'open-uri'
 require 'digest'
 
-Nokogiri::HTML.parse(URI.open('https://www.cdc.gov/coronavirus/2019-ncov/covid-data/covidview/01152021/specimens-tested.html'))
+doc = Nokogiri::HTML.parse(URI.open('https://www.cdc.gov/coronavirus/2019-ncov/covid-data/covidview/01152021/specimens-tested.html'))
 
 def scraping(client)
   begin
@@ -26,5 +26,11 @@ def scraping(client)
   client.query(t)
   rescue
     puts 'The table has already been created'
+  end
+
+  document.at('table').search('tr').each do |row|
+    cells = row.search('th, td').map { |r| r.text.strip }
+
+
   end
 end
